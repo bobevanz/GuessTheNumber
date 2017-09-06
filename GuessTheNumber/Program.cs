@@ -6,14 +6,18 @@ using System.Threading.Tasks;
 
 namespace GuessTheNumber
 {
-    class Program{
+    class Program {
+        const int MaxGuesses = 7;
+        int NbrOfGuesses = MaxGuesses;
+    
       int GenerateMagicNumber(int HighestNumber){
             Random rnd = new Random();
-            var MagicNumber = rnd.Next(11);
-            Debug($" The magic number is { MagicNumber}");
+            var MagicNumber = rnd.Next(HighestNumber+1);
+            //this is commented out to keep from revealing the magic number >> Debug($" The magic number is { MagicNumber}");
             return MagicNumber;
         }
         int AskForTheGuess() {
+            NbrOfGuesses--; // same as NbrOfGuesses = NbrOfGuesses -1;
             Console.Write($"Enter your guess : ");
             var TheGuess = Console.ReadLine();
             int GuessNumber = int.Parse(TheGuess);
@@ -40,19 +44,30 @@ namespace GuessTheNumber
                 return true;
             }
             if (result== -1){ //the guess is too low
-                Debug("Too Low - Guess Again");
+                Debug($"Too Low. You have {NbrOfGuesses} guesses remaining.");
+                if (NbrOfGuesses == 0) {
+                    Debug("You're out of guesses -you lose!");
                 return false;
+                }
             }
-            if (result== 1) { //the guess is too high
-                Debug("Too High - Guess Again");
-            return false;
-                    }
+            if (result == 1)
+            { //the guess is too high
+                Debug($"Too High.  You have {NbrOfGuesses} guesses remaining.");
+                if (NbrOfGuesses == 0)
+                {
+                    Debug("You're out of guesses -you lose!");
+
+
+                    return false;
+                }
+            }
             return true;          
         }
         void Debug(string message){
           Console.WriteLine(message);
         }
         void RunGameOnce(){
+            NbrOfGuesses = MaxGuesses;
             var MagicNumber = GenerateMagicNumber(100);
             bool GameOver = false;
             while (GameOver== false) {
